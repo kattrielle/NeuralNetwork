@@ -5,6 +5,7 @@ $(document).ready(function() {
     
     var pictures = [];
     var mouseFlag = false;
+    var pixelSize = 100;
     var WeightMap = [];
     
     ClearDrawingArea();
@@ -18,6 +19,7 @@ $(document).ready(function() {
 //    $("#clusteringForm").submit( function() 
 //    {Clustering();Clustering(); return false} );
     $("#resetButton").click( ResetData );
+    $("#recognizeButton").click( Recognize );
     
     function MouseDrawStart( event )
     {
@@ -47,11 +49,68 @@ $(document).ready(function() {
     function AddPicture( )
     {
         var pixelVect = MakingPixelMap();
-        pictures.push( { name: $("#imageTypeInput").text(),
+        pictures.push( { name: $("#nameInput").text(),
             map:  pixelVect } );
         UpdateWeightMatrix( pixelVect );
         ClearDrawingArea();
         return false;
+    }
+    
+    function Equal( vector1, vector2)
+    {
+        var len1 = vector1.length;
+        var len2 = vector2.length;
+        var flag = true;
+        if (len1 != len2) {
+            return false;
+        }
+        for (var i=0; i<len1; i++)
+            if ( vector1[i] != vector2[i]) {
+                flag = false;
+            }
+    return flag;
+    }
+    
+    function NormalizeVector( vector )
+    {
+        for (var i=0; i<vector.length; i++ )
+            if ( vector[i] >= 0)
+                vector[i] = 1;
+            else vector[i] = -1;
+        return vector;
+    }
+        
+    function Recognize()
+    {
+        var pixelVect = [];
+        var newPixelVect = MakingPixelMap();
+        while ( !Equal( pixelVect, newPixelVect ) ) {
+            pixelVect = newPixelVect;
+            newPixelVect = Multiply( WeightMap, pixelVect );
+            newPixelVect = NormalizeVector( newPixelVect );
+        }
+        for (var i=0; i< pictures.length; i++) {
+            if ( Equal(pixelVect, pictures[i].map) ) {
+                //вывод результата, ыхыхы
+                return;
+            }
+        }
+        //сказать, что ничего не нашлось :(
+    }
+    
+    function Multiply(matrix, vector)
+    {
+        var len = vector.length;
+        var result = [];
+        var sum = 0;
+        for (var i=0; i < len; i++) {
+            for (var j=0; j<len; j++) {
+                sum += matrix[i][j] * vector[j];
+            }
+            result.push( sum );
+            sum=0;
+        }
+        return result;
     }
     
     function UpdateWeightMatrix( newPixelList )
@@ -66,6 +125,9 @@ $(document).ready(function() {
     function MatrixSumm( matrix1, matrix2)
     {
         var len=matrix1.length;
+        if ( len == 0 ) {
+            return matrix2;
+        }
         for (var i=0; i< len; i++) {
             for( var j=0; j < len; j++ ) {
                 matrix1[i][j] = matrix1[i][j] + matrix2[i][j];
@@ -102,7 +164,7 @@ $(document).ready(function() {
         var pixelMap = ctx.getImageData(0, 0, imageField.width, imageField.height).data;
         for (var i=0; i < pixelMap.length; i+=4) {
             if (pixelMap[i] == 255 && pixelMap[i+1] == 255 && pixelMap[i+2] == 255) { 
-                map.push(0);
+                map.push(-1);
             } else {
                 map.push(1);
             }   
