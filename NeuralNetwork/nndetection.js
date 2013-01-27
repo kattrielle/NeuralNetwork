@@ -49,7 +49,7 @@ $(document).ready(function() {
     function AddPicture( )
     {
         var pixelVect = MakingPixelMap();
-        pictures.push( { name: $("#nameInput").text(),
+        pictures.push( { name: $("#imageTypeInput").val(),
             map:  pixelVect } );
         UpdateWeightMatrix( pixelVect );
         ClearDrawingArea();
@@ -91,11 +91,11 @@ $(document).ready(function() {
         }
         for (var i=0; i< pictures.length; i++) {
             if ( Equal(pixelVect, pictures[i].map) ) {
-                //вывод результата, ыхыхы
+                alert( pictures[i].name);
                 return;
             }
         }
-        //сказать, что ничего не нашлось :(
+        alert( "Похожих изображений в обучающем множестве нет");
     }
     
     function Multiply(matrix, vector)
