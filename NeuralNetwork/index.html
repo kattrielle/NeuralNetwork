@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Распознавание изображений при помощи нейросети</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.css">
+        <link rel="stylesheet" href="lib/bootstrap/css/bootstrap-responsive.css">
+    </head>
+    <body>
+        <canvas class ="drawing-area" height='25' width='25' id='picture'>Обновите браузер</canvas> 
+        <button class="btn btn-inverse" id='clearButton'>Очистить</button>
+        <form id="addingForm">
+            <input type="text" id="imageTypeInput" name="nameInput" placeholder="Образ" required="required">
+            <input type="submit" class="btn btn-inverse" value="Добавить">
+        </form>
+        <button class="btn btn-inverse" id="recognizeButton">Распознать</button>
+        <button class="btn btn-inverse" id='resetButton'>Сбросить</button>
+        
+        <div class="modal hide fade" id="modalClassify">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3>Результат классификации</h3>
+            </div>
+            <div class="modal-body">
+                <p>One fine body…</p>
+            </div>
+            <div class="modal-footer">
+
+            </div>
+        </div>
+
+        <script src="lib/jquery/jquery-1.8.3.min.js"></script>
+        <script src="detecting.js"></script>
+        <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+    </body>
+</html>
